@@ -1,37 +1,54 @@
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {
-  /// Check if location services are enabled
-  Future<bool> _handleLocationPermission() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      throw Exception('Location services are disabled.');
+  /// Check if location services (GPS) are enabled
+  Future<bool> isServiceEnabled() async {
+    try {
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      return serviceEnabled;
+    } catch (e) {
+      throw Exception('Error checking location service status: $e');
     }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        throw Exception('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      throw Exception('Location permissions are permanently denied');
-    }
-
-    return true;
   }
 
-  /// Get current location
+  /// Check current permission status
+  Future<LocationPermission> checkPermissionStatus() async {
+    try {
+      final permission = await Geolocator.checkPermission();
+      return permission;
+    } catch (e) {
+      throw Exception('Error checking location permission: $e');
+    }
+  }
+
+  /// Request location permission
+  Future<LocationPermission> requestPermission() async {
+    try {
+      final permission = await Geolocator.requestPermission();
+      return permission;
+    } catch (e) {
+      throw Exception('Error requesting location permission: $e');
+    }
+  }
+
+  /// Get current location (with internal checks)
   Future<Position> getCurrentLocation() async {
     try {
-      final hasPermission = await _handleLocationPermission();
-      if (!hasPermission) {
-        throw Exception('Location permission not granted');
+      final serviceEnabled = await isServiceEnabled();
+      if (!serviceEnabled) {
+        throw Exception('Location services are disabled.');
+      }
+
+      var permission = await checkPermissionStatus();
+      if (permission == LocationPermission.denied) {
+        permission = await requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Location permissions are denied.');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Location permissions are permanently denied.');
       }
 
       final position = await Geolocator.getCurrentPosition();
@@ -39,15 +56,5 @@ class LocationService {
     } catch (e) {
       throw Exception('Error getting current location: $e');
     }
-  }
-
-  /// Check permission status
-  Future<LocationPermission> checkPermissionStatus() async {
-    return await Geolocator.checkPermission();
-  }
-
-  /// Request location permission
-  Future<LocationPermission> requestPermission() async {
-    return await Geolocator.requestPermission();
   }
 }

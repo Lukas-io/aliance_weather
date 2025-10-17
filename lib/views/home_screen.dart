@@ -92,7 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Text(
                             weatherController.weatherData.value.location.name,
-                            style: Theme.of(context).textTheme.headlineLarge,
+                            maxLines: 2,
+                            style: Theme.of(context).textTheme.headlineLarge
+                                ?.copyWith(
+                                  height: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                           ),
                           Text(
                             formatted,
@@ -162,12 +167,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        spacing: 12,
+                        spacing: 8,
                         children: [
                           Text(
                             'Use Current Location',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 16,
                               color: WeatherColors.primary,
                               fontWeight: FontWeight.w600,
                             ),

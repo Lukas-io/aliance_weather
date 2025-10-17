@@ -49,7 +49,14 @@ class _ForecastDayItem extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: 12,
           children: [
+            // Weather icon
+            SvgPicture.asset(
+              WeatherIconMapper.getWeatherIconPath(day.condition.text),
+              width: 40,
+              height: 40,
+            ),
             // Date and day
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,13 +70,6 @@ class _ForecastDayItem extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
-            ),
-
-            // Weather icon
-            SvgPicture.asset(
-              WeatherIconMapper.getWeatherIconPath(day.condition.text),
-              width: 40,
-              height: 40,
             ),
 
             // Weather condition

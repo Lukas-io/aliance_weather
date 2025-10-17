@@ -122,35 +122,29 @@ class HourlyForecastWidget extends StatelessWidget {
             ),
 
             // Graph view in horizontal scroll
-            SizedBox(
-              height: 200,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
-                physics: ClampingScrollPhysics(),
-                child: SizedBox(
-                  width: hourlyData.length * 50.0,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      // Graph painter
-                      CustomPaint(
-                        painter: TemperatureGraphPainter(
-                          hourlyData: hourlyData,
-                          currentTimeIndex: currentTimeIndex,
-                          lineColor: Colors.black87,
-                          fillColor: WeatherColors.card,
-                          currentTimeIndicatorColor: Theme.of(
-                            context,
-                          ).colorScheme.primary,
-                        ),
-                        size: Size(hourlyData.length * 50.0, 200),
-                      ),
-                      // Overlay SVG icons on chart points
-                      ..._buildIconOverlay(hourlyData, currentTimeIndex),
-                    ],
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
+              physics: ClampingScrollPhysics(),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // Graph painter
+                  CustomPaint(
+                    painter: TemperatureGraphPainter(
+                      hourlyData: hourlyData,
+                      currentTimeIndex: currentTimeIndex,
+                      lineColor: Colors.black87,
+                      fillColor: WeatherColors.card,
+                      currentTimeIndicatorColor: Theme.of(
+                        context,
+                      ).colorScheme.primary,
+                    ),
+                    size: Size(hourlyData.length * 80.0, 200),
                   ),
-                ),
+                  // Overlay SVG icons on chart points
+                  // ..._buildIconOverlay(hourlyData, currentTimeIndex),
+                ],
               ),
             ),
           ],
@@ -164,7 +158,7 @@ class HourlyForecastWidget extends StatelessWidget {
     int currentTimeIndex,
   ) {
     final widgets = <Widget>[];
-    final double widthPerHour = 50.0;
+    final double widthPerHour = 87.2;
 
     // Find min and max temperatures for scaling
     double minTemp = hourlyData.first.temp;
@@ -177,8 +171,8 @@ class HourlyForecastWidget extends StatelessWidget {
 
     // Add some padding to the range
     final tempRange = (maxTemp - minTemp).abs();
-    minTemp -= tempRange * 0.1;
-    maxTemp += tempRange * 0.1;
+    minTemp -= tempRange * 0.5;
+    maxTemp += tempRange * 0.5;
 
     if (tempRange == 0) {
       minTemp -= 1;
@@ -189,12 +183,14 @@ class HourlyForecastWidget extends StatelessWidget {
       final hour = hourlyData[i];
       final x = i * widthPerHour;
       // Calculate Y position to match the painter
-      final y = 220 - ((hour.temp - minTemp) / (maxTemp - minTemp)) * 140;
+      // final y = 220 - ((hour.temp - minTemp) / (maxTemp - minTemp)) * 140;
+      final y =
+          200 - 30 - ((hour.temp - minTemp) / (maxTemp - minTemp)) * (200 - 60);
 
       widgets.add(
         Positioned(
           left: x - 12,
-          top: y - 32,
+          top: y,
           child: SvgPicture.asset(
             WeatherIconMapper.getWeatherIconPath(hour.condition.text),
             width: 24,

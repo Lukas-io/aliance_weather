@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:aliance_weather/controllers/weather_controller.dart';
 import 'package:aliance_weather/controllers/location_controller.dart';
 import 'package:aliance_weather/views/widgets/current_weather_widget.dart';
 import 'package:aliance_weather/views/widgets/location_input_widget.dart';
+
+import '../utils/weather_icon_mapper.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -34,55 +37,20 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             LocationInputWidget(
               onSearch: (query) {
+                FocusManager.instance.primaryFocus?.unfocus();
                 if (query.isNotEmpty) {
                   weatherController.searchWeather(query);
                 }
               },
             ),
-            const SizedBox(height: 20),
-
-            // Use current location button
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: () async {
-                  final position = await locationController
-                      .getCurrentLocation();
-                  if (position != null) {
-                    await weatherController.fetchWeatherByLocation(
-                      position.latitude,
-                      position.longitude,
-                    );
-                  }
-                },
-                icon: const Icon(Icons.my_location),
-                label: const Text('Use Current Location'),
-              ),
-            ),
-
-            // Error message for location
-            Obx(() {
-              if (locationController.errorMessage.value.isNotEmpty) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Text(
-                    locationController.errorMessage.value,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            }),
-
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
 
             // Display weather data if available
             Obx(() {
               if (weatherController.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(strokeWidth: 2.5),
+                );
               }
 
               if (weatherController.errorMessage.value.isNotEmpty) {
@@ -104,8 +72,40 @@ class _SearchScreenState extends State<SearchScreen> {
                   .location
                   .name
                   .isNotEmpty) {
-                return CurrentWeatherWidget(
-                  weather: weatherController.weatherData.value,
+                final weather = weatherController.weatherData.value;
+                return Column(
+                  children: [
+                    Text(
+                      weather.location.name,
+                      style: Theme.of(context).textTheme.headlineLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 8),
+
+                    Row(),
+                    // Weather icon
+                    SvgPicture.asset(
+                      WeatherIconMapper.getWeatherIconPath(
+                        weather.current.condition.text,
+                      ),
+                      width: 150,
+                      height: 150,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      '${weather.current.temp.toStringAsFixed(0)}°C',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.displayLarge?.copyWith(letterSpacing: 1.7),
+                    ),
+
+                    Text(
+                      weather.current.condition.text,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+
+                    const SizedBox(height: 20),
+                  ],
                 );
               }
 

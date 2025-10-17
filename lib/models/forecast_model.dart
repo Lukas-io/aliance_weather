@@ -96,11 +96,13 @@ class ForecastCondition {
 class HourlyForecast {
   final DateTime time;
   final double temp;
+  final double humidity;
   final ForecastCondition condition;
 
   HourlyForecast({
     required this.time,
     required this.temp,
+    required this.humidity,
     required this.condition,
   });
 
@@ -108,6 +110,7 @@ class HourlyForecast {
     return HourlyForecast(
       time: DateTime.parse(json['time'] ?? DateTime.now().toIso8601String()),
       temp: (json['temp_c'] ?? 0).toDouble(),
+      humidity: (json['humidity'] ?? 0).toDouble(),
       condition: ForecastCondition.fromJson(json['condition'] ?? {}),
     );
   }
@@ -116,6 +119,7 @@ class HourlyForecast {
     return {
       'time': time.toIso8601String(),
       'temp_c': temp,
+      'humidity': humidity,
       'condition': condition.toJson(),
     };
   }

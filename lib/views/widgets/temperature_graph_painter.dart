@@ -29,18 +29,18 @@ class TemperatureGraphPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     // Find min and max temperatures for scaling
-    double minTemp = hourlyData.first.temp;
-    double maxTemp = hourlyData.first.temp;
+    double minTemp = hourlyData.first.humidity;
+    double maxTemp = hourlyData.first.humidity;
 
     for (final hour in hourlyData) {
-      if (hour.temp < minTemp) minTemp = hour.temp;
-      if (hour.temp > maxTemp) maxTemp = hour.temp;
+      if (hour.humidity < minTemp) minTemp = hour.humidity;
+      if (hour.humidity > maxTemp) maxTemp = hour.humidity;
     }
 
     // Add some padding to the range
     final tempRange = (maxTemp - minTemp).abs();
-    minTemp -= tempRange * 0.1;
-    maxTemp += tempRange * 0.1;
+    minTemp -= tempRange * 0.5;
+    maxTemp += tempRange * 0.5;
 
     if (tempRange == 0) {
       minTemp -= 1;
@@ -58,7 +58,8 @@ class TemperatureGraphPainter extends CustomPainter {
       final y =
           size.height -
           30 -
-          ((hour.temp - minTemp) / (maxTemp - minTemp)) * (size.height - 60);
+          ((hour.humidity - minTemp) / (maxTemp - minTemp)) *
+              (size.height - 60);
       points.add(Offset(x, y));
     }
 
@@ -103,8 +104,12 @@ class TemperatureGraphPainter extends CustomPainter {
       // Draw max and min temperatures
       final textPainter = TextPainter(
         text: TextSpan(
-          text: '${hour.temp.toStringAsFixed(0)}°',
-          style: const TextStyle(color: Colors.black, fontSize: 14),
+          text: '${hour.humidity.toStringAsFixed(0)}%',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         textDirection: TextDirection.ltr,
       );
@@ -116,12 +121,16 @@ class TemperatureGraphPainter extends CustomPainter {
       final timeTextPainter = TextPainter(
         text: TextSpan(
           text: hourText,
-          style: const TextStyle(color: Colors.grey, fontSize: 10),
+          style: const TextStyle(
+            color: Colors.black87,
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         textDirection: TextDirection.ltr,
       );
       timeTextPainter.layout();
-      timeTextPainter.paint(canvas, Offset(point.dx - 10, size.height - 20));
+      timeTextPainter.paint(canvas, Offset(point.dx - 17.5, size.height - 25));
     }
 
     // Draw current time indicator (dial/radar effect)

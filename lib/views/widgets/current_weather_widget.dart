@@ -18,12 +18,14 @@ class CurrentWeatherWidget extends StatelessWidget {
         children: [
           Row(),
           // Weather icon
-          SvgPicture.asset(
-            WeatherIconMapper.getWeatherIconPath(
-              weather.current.condition.text,
+          Expanded(
+            child: SvgPicture.asset(
+              WeatherIconMapper.getWeatherIconPath(
+                weather.current.condition.text,
+              ),
+              width: 150,
+              height: 150,
             ),
-            width: 150,
-            height: 150,
           ),
           const SizedBox(height: 16),
           Text(
