@@ -1,16 +1,54 @@
-# aliance_weather
+# Alliance Weather
 
-A weather app for Aliance Consulting
+A minimal weather app that displays real-time weather data and forecasts using WeatherAPI.
+
+## Features
+
+- Real-time weather data (temperature, humidity, wind speed)
+- 5-day weather forecast
+- Search weather by city
+- Current location weather (with permission handling)
+- Persistent storage of last searched location
+- Default location: Lagos
+
+## Tech Stack
+
+- Flutter
+- GetX (state management)
+- GetStorage (local storage)
+- Geolocator (location services)
+- HTTP (API calls)
+- WeatherAPI.com (free tier)
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
+- Flutter SDK
+- WeatherAPI.com free API key
 
-A few resources to get you started if this is your first Flutter project:
+### Setup
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. Clone the repository
+2. Run `flutter pub get`
+3. Add your WeatherAPI key to `lib/config/constants/api_constants.dart`
+4. Run `flutter run`
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Project Structure
+
+```
+lib/
+├── main.dart
+├── config/
+├── models/
+├── controllers/
+├── views/
+├── services/
+└── utils/
+```
+
+## Permissions
+
+- **Android**: Location permission (coarse & fine)
+- **iOS**: Location when in use
+
+Permission requests are optional. App continues with default location if denied.
