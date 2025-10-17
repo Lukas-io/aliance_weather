@@ -64,7 +64,6 @@ class LocationController extends GetxController {
   /// Get current location
   Future<Position?> getCurrentLocation() async {
     try {
-      _initializeLocationStatus();
       errorMessage('');
       final position = await _locationService.getCurrentLocation();
       return position;

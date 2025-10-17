@@ -52,6 +52,7 @@ class LocationService {
       }
 
       final position = await Geolocator.getCurrentPosition();
+
       return position;
     } catch (e) {
       throw Exception('Error getting current location: $e');
