@@ -13,6 +13,12 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
+  flutter_animate: ^4.5.2
+  get: ^4.7.2
+  dio: ^5.9.0
+  sprung: ^3.0.1
+
+
 
 dev_dependencies:
   flutter_test:
@@ -27,8 +33,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/fonts/
-    - assets/images/
-    - assets/videos/
+#    - assets/images/
+#    - assets/videos/
 
 
   fonts:
