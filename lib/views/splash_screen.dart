@@ -12,12 +12,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Navigate to home screen after 2 seconds
     _navigateToHome();
   }
 
   _navigateToHome() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(milliseconds: 800));
     if (mounted) {
       Navigator.pushReplacement(
         context,
@@ -29,24 +28,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Logo image
-            Image.asset(
-              'assets/images/logo.png',
-              width: 150,
-              height: 150,
-              fit: BoxFit.contain,
-            ),
-            const SizedBox(height: 30),
-            // Loading indicator
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-            ),
-          ],
+        child: ClipRRect(
+          borderRadius: BorderRadiusGeometry.circular(24),
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: 100,
+            height: 100,
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );

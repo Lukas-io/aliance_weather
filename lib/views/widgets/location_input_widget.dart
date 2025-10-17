@@ -1,3 +1,4 @@
+import 'package:aliance_weather/core/colors.dart';
 import 'package:flutter/material.dart';
 
 class LocationInputWidget extends StatefulWidget {
@@ -25,9 +26,13 @@ class _LocationInputWidgetState extends State<LocationInputWidget> {
         Expanded(
           child: TextField(
             controller: _controller,
+
             decoration: const InputDecoration(
               hintText: 'Enter city name',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: Icon(Icons.search, size: 24),
+              fillColor: WeatherColors.card,
+              contentPadding: EdgeInsetsGeometry.symmetric(vertical: 0),
+              isDense: true,
             ),
             onSubmitted: (value) {
               if (value.isNotEmpty) {
@@ -36,14 +41,19 @@ class _LocationInputWidgetState extends State<LocationInputWidget> {
             },
           ),
         ),
-        const SizedBox(width: 10),
-        ElevatedButton(
+        const SizedBox(width: 4),
+        IconButton.filled(
           onPressed: () {
             if (_controller.text.isNotEmpty) {
               widget.onSearch(_controller.text);
             }
           },
-          child: const Text('Search'),
+          style: IconButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadiusGeometry.circular(4),
+            ),
+          ),
+          icon: const Icon(Icons.search),
         ),
       ],
     );

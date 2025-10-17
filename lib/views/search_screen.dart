@@ -19,28 +19,19 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
-    weatherController = Get.find<WeatherController>();
-    locationController = Get.find<LocationController>();
+    weatherController = Get.put(WeatherController());
+    locationController = Get.put(LocationController());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Location'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Padding(
+      appBar: AppBar(title: const Text('Search Location')),
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Location input widget
             LocationInputWidget(
               onSearch: (query) {
                 if (query.isNotEmpty) {

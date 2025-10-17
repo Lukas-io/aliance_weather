@@ -12,7 +12,7 @@ class TemperatureGraphPainter extends CustomPainter {
     required this.hourlyData,
     required this.currentTimeIndex,
     this.lineColor = Colors.blue,
-    this.fillColor = Colors.lightBlueAccent,
+    this.fillColor = Colors.transparent,
     this.currentTimeIndicatorColor = Colors.orange,
   });
 
