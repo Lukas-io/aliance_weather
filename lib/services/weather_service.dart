@@ -11,8 +11,9 @@ class WeatherService {
   /// Fetch current weather by latitude and longitude
   Future<WeatherModel?> getCurrentWeather(double lat, double lon) async {
     try {
+      // Request astro data by setting aq=1 (air quality which includes astro data)
       final url = Uri.parse(
-        '$baseUrl${ApiConstants.currentWeatherEndpoint}?key=$apiKey&q=$lat,$lon',
+        '$baseUrl${ApiConstants.currentWeatherEndpoint}?key=$apiKey&q=$lat,$lon&aqi=yes',
       );
       final response = await http.get(url);
 
@@ -30,8 +31,9 @@ class WeatherService {
   /// Fetch forecast by latitude and longitude
   Future<ForecastModel?> getForecast(double lat, double lon) async {
     try {
+      // Request hourly data by setting hourly=1 and specifying number of days
       final url = Uri.parse(
-        '$baseUrl${ApiConstants.forecastEndpoint}?key=$apiKey&q=$lat,$lon&days=${ApiConstants.forecastDays}',
+        '$baseUrl${ApiConstants.forecastEndpoint}?key=$apiKey&q=$lat,$lon&days=${ApiConstants.forecastDays}&hourly=1&aqi=yes',
       );
       final response = await http.get(url);
 
@@ -50,7 +52,7 @@ class WeatherService {
   Future<WeatherModel?> searchCity(String cityName) async {
     try {
       final url = Uri.parse(
-        '$baseUrl${ApiConstants.currentWeatherEndpoint}?key=$apiKey&q=$cityName',
+        '$baseUrl${ApiConstants.currentWeatherEndpoint}?key=$apiKey&q=$cityName&aqi=yes',
       );
       final response = await http.get(url);
 

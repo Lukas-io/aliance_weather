@@ -12,9 +12,7 @@ class CurrentWeatherWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -26,7 +24,7 @@ class CurrentWeatherWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 10),
-            
+
             // Temperature and condition with icon
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,14 +34,16 @@ class CurrentWeatherWidget extends StatelessWidget {
                   '${weather.current.temp.toStringAsFixed(0)}°C',
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
-                
+
                 // Weather condition with icon
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     // Weather icon
                     SvgPicture.asset(
-                      WeatherIconMapper.getWeatherIconPath(weather.current.condition.text),
+                      WeatherIconMapper.getWeatherIconPath(
+                        weather.current.condition.text,
+                      ),
                       width: 50,
                       height: 50,
                     ),
@@ -57,7 +57,7 @@ class CurrentWeatherWidget extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            
+
             // Weather details
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -68,14 +68,14 @@ class CurrentWeatherWidget extends StatelessWidget {
                   label: 'Humidity',
                   value: '${weather.current.humidity}%',
                 ),
-                
+
                 // Wind speed
                 _WeatherDetailItem(
                   icon: Icons.air,
                   label: 'Wind',
                   value: '${weather.current.windSpeed} km/h',
                 ),
-                
+
                 // Feels like
                 _WeatherDetailItem(
                   icon: Icons.thermostat,
@@ -108,14 +108,8 @@ class _WeatherDetailItem extends StatelessWidget {
       children: [
         Icon(icon, size: 24, color: Theme.of(context).colorScheme.primary),
         const SizedBox(height: 5),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
+        Text(label, style: Theme.of(context).textTheme.bodySmall),
+        Text(value, style: Theme.of(context).textTheme.bodyMedium),
       ],
     );
   }

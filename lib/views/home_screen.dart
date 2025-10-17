@@ -5,6 +5,8 @@ import 'package:aliance_weather/controllers/location_controller.dart';
 import 'package:aliance_weather/views/search_screen.dart';
 import 'package:aliance_weather/views/widgets/current_weather_widget.dart';
 import 'package:aliance_weather/views/widgets/forecast_widget.dart';
+import 'package:aliance_weather/views/widgets/hourly_forecast_widget.dart';
+import 'package:aliance_weather/views/widgets/sun_trajectory_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -33,7 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
-              Get.to(() => const SearchScreen());
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SearchScreen()),
+              );
             },
           ),
         ],
@@ -87,6 +92,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Current weather widget
                   CurrentWeatherWidget(
                     weather: weatherController.weatherData.value,
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Sun trajectory widget
+                  SunTrajectoryWidget(
+                    weather: weatherController.weatherData.value,
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Hourly forecast widget
+                  HourlyForecastWidget(
+                    hourlyData: weatherController.getNext24Hours(),
+                    graphColor: Theme.of(context).colorScheme.primary,
                   ),
                   const SizedBox(height: 30),
 

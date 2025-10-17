@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:aliance_weather/config/theme/app_theme.dart';
-import 'package:aliance_weather/controllers/bindings.dart';
 import 'package:aliance_weather/views/splash_screen.dart';
+import 'package:aliance_weather/views/home_screen.dart';
+import 'package:aliance_weather/views/search_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,11 +16,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'Weather App',
       theme: AppTheme.appTheme,
-      initialBinding: AppBindings(),
       home: const SplashScreen(),
+      routes: {
+        '/home': (context) => const HomeScreen(),
+        '/search': (context) => const SearchScreen(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }

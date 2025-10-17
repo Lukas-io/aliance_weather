@@ -1,11 +1,13 @@
 class WeatherModel {
   final Location location;
   final Current current;
+  final Astro astro;
   final DateTime lastUpdated;
 
   WeatherModel({
     required this.location,
     required this.current,
+    required this.astro,
     required this.lastUpdated,
   });
 
@@ -13,6 +15,7 @@ class WeatherModel {
     return WeatherModel(
       location: Location.fromJson(json['location'] ?? {}),
       current: Current.fromJson(json['current'] ?? {}),
+      astro: Astro.fromJson(json['location'] ?? {}),
       lastUpdated: DateTime.parse(
         json['current']['last_updated'] ?? DateTime.now().toIso8601String(),
       ),
@@ -23,6 +26,7 @@ class WeatherModel {
     return {
       'location': location.toJson(),
       'current': current.toJson(),
+      'astro': astro.toJson(),
       'last_updated': lastUpdated.toIso8601String(),
     };
   }
@@ -108,5 +112,25 @@ class WeatherCondition {
 
   Map<String, dynamic> toJson() {
     return {'text': text, 'icon': icon, 'code': code};
+  }
+}
+
+class Astro {
+  final String sunrise;
+  final String sunset;
+
+  Astro({required this.sunrise, required this.sunset});
+
+  factory Astro.fromJson(Map<String, dynamic> json) {
+    // Astro data is in the location object in the API response
+    final astroData = json['astro'] ?? {};
+    return Astro(
+      sunrise: astroData['sunrise'] ?? '',
+      sunset: astroData['sunset'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'sunrise': sunrise, 'sunset': sunset};
   }
 }

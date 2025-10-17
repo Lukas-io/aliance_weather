@@ -20,10 +20,14 @@ class WeatherController extends GetxController {
       icon: '',
       feelsLike: 0.0,
     ),
+    astro: Astro(sunrise: '', sunset: ''),
     lastUpdated: DateTime.now(),
   ).obs;
 
-  var forecastData = forecast.ForecastModel(forecastDays: []).obs;
+  var forecastData = forecast.ForecastModel(
+    forecastDays: [],
+    hourlyForecasts: [],
+  ).obs;
   var isLoading = false.obs;
   var errorMessage = ''.obs;
 
@@ -110,5 +114,19 @@ class WeatherController extends GetxController {
   Future<void> searchWeather(String query) async {
     if (query.isEmpty) return;
     await fetchWeatherByCity(query);
+  }
+
+  /// Get next 24 hours of forecast data
+  List<forecast.HourlyForecast> getNext24Hours() {
+    final now = DateTime.now();
+    final twentyFourHoursFromNow = now.add(Duration(hours: 24));
+
+    return forecastData.value.hourlyForecasts
+        .where(
+          (hour) =>
+              hour.time.isAfter(now) &&
+              hour.time.isBefore(twentyFourHoursFromNow),
+        )
+        .toList();
   }
 }

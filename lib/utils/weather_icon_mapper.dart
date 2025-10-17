@@ -17,7 +17,9 @@ class WeatherIconMapper {
     }
 
     // Rain conditions
-    if (text.contains('rain') || text.contains('drizzle') || text.contains('shower')) {
+    if (text.contains('rain') ||
+        text.contains('drizzle') ||
+        text.contains('shower')) {
       if (text.contains('light')) {
         return 'rain_with_cloudy_light.svg';
       } else if (text.contains('heavy') || text.contains('torrential')) {
@@ -27,7 +29,9 @@ class WeatherIconMapper {
     }
 
     // Snow conditions
-    if (text.contains('snow') || text.contains('blizzard') || text.contains('flurries')) {
+    if (text.contains('snow') ||
+        text.contains('blizzard') ||
+        text.contains('flurries')) {
       if (text.contains('light')) {
         return 'snow_with_cloudy_light.svg';
       } else if (text.contains('heavy')) {
@@ -42,7 +46,9 @@ class WeatherIconMapper {
     }
 
     // Mist/Fog conditions
-    if (text.contains('mist') || text.contains('fog') || text.contains('haze')) {
+    if (text.contains('mist') ||
+        text.contains('fog') ||
+        text.contains('haze')) {
       return 'haze_fog_dust_smoke.svg';
     }
 

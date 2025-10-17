@@ -17,10 +17,7 @@ class ForecastWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '5-Day Forecast',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text('5-Day Forecast', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 10),
         SizedBox(
           height: 150,
@@ -47,9 +44,7 @@ class _ForecastDayItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
         width: 80,
         padding: const EdgeInsets.all(8),
@@ -61,35 +56,35 @@ class _ForecastDayItem extends StatelessWidget {
               _getDayOfWeek(day.date),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            
+
             const SizedBox(height: 5),
-            
+
             // Date
             Text(
               '${day.date.day}/${day.date.month}',
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            
+
             const SizedBox(height: 10),
-            
+
             // Weather icon
             SvgPicture.asset(
               WeatherIconMapper.getWeatherIconPath(day.condition.text),
               width: 30,
               height: 30,
             ),
-            
+
             const SizedBox(height: 5),
-            
+
             // Weather condition
             Text(
               day.condition.text,
               style: Theme.of(context).textTheme.bodySmall,
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 10),
-            
+
             // Temperature range
             Text(
               '${day.maxTemp.toStringAsFixed(0)}°',

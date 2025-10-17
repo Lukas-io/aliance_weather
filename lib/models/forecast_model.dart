@@ -1,17 +1,26 @@
 class ForecastModel {
   final List<ForecastDay> forecastDays;
+  final List<HourlyForecast> hourlyForecasts;
 
-  ForecastModel({required this.forecastDays});
+  ForecastModel({required this.forecastDays, required this.hourlyForecasts});
 
   factory ForecastModel.fromJson(Map<String, dynamic> json) {
     final List<ForecastDay> days = [];
+    final List<HourlyForecast> hourly = [];
+
     final forecastList = json['forecast']?['forecastday'] as List? ?? [];
 
     for (var day in forecastList) {
       days.add(ForecastDay.fromJson(day));
+
+      // Extract hourly data from each day
+      final hourlyList = day['hour'] as List? ?? [];
+      for (var hour in hourlyList) {
+        hourly.add(HourlyForecast.fromJson(hour));
+      }
     }
 
-    return ForecastModel(forecastDays: days);
+    return ForecastModel(forecastDays: days, hourlyForecasts: hourly);
   }
 
   Map<String, dynamic> toJson() {
@@ -81,5 +90,33 @@ class ForecastCondition {
 
   Map<String, dynamic> toJson() {
     return {'text': text, 'icon': icon, 'code': code};
+  }
+}
+
+class HourlyForecast {
+  final DateTime time;
+  final double temp;
+  final ForecastCondition condition;
+
+  HourlyForecast({
+    required this.time,
+    required this.temp,
+    required this.condition,
+  });
+
+  factory HourlyForecast.fromJson(Map<String, dynamic> json) {
+    return HourlyForecast(
+      time: DateTime.parse(json['time'] ?? DateTime.now().toIso8601String()),
+      temp: (json['temp_c'] ?? 0).toDouble(),
+      condition: ForecastCondition.fromJson(json['condition'] ?? {}),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'time': time.toIso8601String(),
+      'temp_c': temp,
+      'condition': condition.toJson(),
+    };
   }
 }

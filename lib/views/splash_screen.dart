@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:aliance_weather/views/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,9 +13,17 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Navigate to home screen after 2 seconds
-    Future.delayed(const Duration(seconds: 2), () {
-      Get.offAll(() => const HomeScreen());
-    });
+    _navigateToHome();
+  }
+
+  _navigateToHome() async {
+    await Future.delayed(const Duration(seconds: 2));
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
+      );
+    }
   }
 
   @override
