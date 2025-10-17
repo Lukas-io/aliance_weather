@@ -11,6 +11,9 @@ A minimal weather app that displays real-time weather data and forecasts using W
 - Persistent storage of last searched location
 - Default location: Lagos
 
+## Screenshot
+<img width="4800" height="3286" alt="slideshow" src="https://github.com/user-attachments/assets/bc8099b1-82cf-474f-8b67-c110da44b698" />
+
 ## Tech Stack
 
 - Flutter
