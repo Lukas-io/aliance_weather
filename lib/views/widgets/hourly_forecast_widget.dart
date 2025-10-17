@@ -1,5 +1,4 @@
 import 'package:aliance_weather/core/colors.dart';
-import 'package:aliance_weather/views/5_day_forecast_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aliance_weather/models/forecast_model.dart' as forecast;
@@ -7,10 +6,12 @@ import 'package:aliance_weather/utils/weather_icon_mapper.dart';
 import 'package:aliance_weather/views/widgets/temperature_graph_painter.dart';
 
 import '../../models/weather_model.dart';
+import '../day_forecast_screen.dart';
 
 class HourlyForecastWidget extends StatelessWidget {
   final List<forecast.HourlyForecast> hourlyData;
   final WeatherModel weather;
+  final forecast.ForecastModel forecastData;
 
   final Color graphColor;
   final double itemWidth;
@@ -18,6 +19,7 @@ class HourlyForecastWidget extends StatelessWidget {
   const HourlyForecastWidget({
     super.key,
     required this.hourlyData,
+    required this.forecastData,
     required this.weather,
     this.graphColor = Colors.blue,
     this.itemWidth = 50,
@@ -39,115 +41,120 @@ class HourlyForecastWidget extends StatelessWidget {
       }
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: WeatherColors.card,
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        'Today',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                    ),
-
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DayForecastScreen(),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: EdgeInsetsGeometry.symmetric(vertical: 4),
-                        child: Row(
-                          children: [
-                            Text(
-                              'View 5-day forecast',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                            Icon(Icons.arrow_forward_ios, size: 16),
-                          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Card(
+        elevation: 2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 12,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Today',
+                          style: Theme.of(context).textTheme.titleLarge,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Humidity
-                    _WeatherDetailItem(
-                      icon: Icons.water_drop,
-                      label: 'Humidity',
-                      value: '${weather.current.humidity}%',
-                    ),
 
-                    // Wind speed
-                    _WeatherDetailItem(
-                      icon: Icons.air,
-                      label: 'Wind',
-                      value: '${weather.current.windSpeed} km/h',
-                    ),
-
-                    // Feels like
-                    _WeatherDetailItem(
-                      icon: Icons.thermostat,
-                      label: 'Feels like',
-                      value:
-                          '${weather.current.feelsLike.toStringAsFixed(0)}°C',
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          // Graph view in horizontal scroll
-          SizedBox(
-            height: 200,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              physics: ClampingScrollPhysics(),
-              child: SizedBox(
-                width: hourlyData.length * 50.0,
-                child: Stack(
-                  children: [
-                    // Graph painter
-                    CustomPaint(
-                      painter: TemperatureGraphPainter(
-                        hourlyData: hourlyData,
-                        currentTimeIndex: currentTimeIndex,
-                        lineColor: Colors.black87,
-                        fillColor: WeatherColors.card,
-                        currentTimeIndicatorColor: Theme.of(
-                          context,
-                        ).colorScheme.primary,
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DayForecastScreen(forecastData: forecastData),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsetsGeometry.symmetric(vertical: 4),
+                          child: Row(
+                            children: [
+                              Text(
+                                'View 5-day forecast',
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                              Icon(Icons.arrow_forward_ios, size: 16),
+                            ],
+                          ),
+                        ),
                       ),
-                      size: Size(hourlyData.length * 50.0, 200),
-                    ),
-                    // Overlay SVG icons on chart points
-                    ..._buildIconOverlay(hourlyData, currentTimeIndex),
-                  ],
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Humidity
+                      _WeatherDetailItem(
+                        icon: Icons.water_drop,
+                        label: 'Humidity',
+                        value: '${weather.current.humidity}%',
+                      ),
+
+                      // Wind speed
+                      _WeatherDetailItem(
+                        icon: Icons.air,
+                        label: 'Wind',
+                        value: '${weather.current.windSpeed} km/h',
+                      ),
+
+                      // Feels like
+                      _WeatherDetailItem(
+                        icon: Icons.thermostat,
+                        label: 'Feels like',
+                        value:
+                            '${weather.current.feelsLike.toStringAsFixed(0)}°C',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Graph view in horizontal scroll
+            SizedBox(
+              height: 200,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsetsGeometry.symmetric(horizontal: 24),
+                physics: ClampingScrollPhysics(),
+                child: SizedBox(
+                  width: hourlyData.length * 50.0,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      // Graph painter
+                      CustomPaint(
+                        painter: TemperatureGraphPainter(
+                          hourlyData: hourlyData,
+                          currentTimeIndex: currentTimeIndex,
+                          lineColor: Colors.black87,
+                          fillColor: WeatherColors.card,
+                          currentTimeIndicatorColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                        ),
+                        size: Size(hourlyData.length * 50.0, 200),
+                      ),
+                      // Overlay SVG icons on chart points
+                      ..._buildIconOverlay(hourlyData, currentTimeIndex),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -182,7 +189,7 @@ class HourlyForecastWidget extends StatelessWidget {
       final hour = hourlyData[i];
       final x = i * widthPerHour;
       // Calculate Y position to match the painter
-      final y = 170 - ((hour.temp - minTemp) / (maxTemp - minTemp)) * 140;
+      final y = 220 - ((hour.temp - minTemp) / (maxTemp - minTemp)) * 140;
 
       widgets.add(
         Positioned(

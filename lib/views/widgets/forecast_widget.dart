@@ -17,10 +17,7 @@ class ForecastWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '5-Day Forecast',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text('5-Day Forecast', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 10),
         // Make it a list instead of horizontal scroll
         ListView.builder(
@@ -46,9 +43,7 @@ class _ForecastDayItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       margin: const EdgeInsets.only(bottom: 10),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -69,14 +64,14 @@ class _ForecastDayItem extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             // Weather icon
             SvgPicture.asset(
               WeatherIconMapper.getWeatherIconPath(day.condition.text),
               width: 40,
               height: 40,
             ),
-            
+
             // Weather condition
             Expanded(
               child: Text(
@@ -86,7 +81,7 @@ class _ForecastDayItem extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            
+
             // Temperature range
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,

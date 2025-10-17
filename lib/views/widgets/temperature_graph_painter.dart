@@ -25,7 +25,7 @@ class TemperatureGraphPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final fillPaint = Paint()
-      ..color = fillColor.withValues(alpha: 0.3)
+      ..color = fillColor.withValues(alpha: 0.0)
       ..style = PaintingStyle.fill;
 
     // Find min and max temperatures for scaling
@@ -62,7 +62,6 @@ class TemperatureGraphPainter extends CustomPainter {
       points.add(Offset(x, y));
     }
 
-    // Draw the line
     if (points.isNotEmpty) {
       final path = Path();
       final fillPath = Path();
@@ -70,10 +69,19 @@ class TemperatureGraphPainter extends CustomPainter {
       path.moveTo(points[0].dx, points[0].dy);
       fillPath.moveTo(points[0].dx, points[0].dy);
 
-      for (int i = 1; i < points.length; i++) {
-        path.lineTo(points[i].dx, points[i].dy);
-        fillPath.lineTo(points[i].dx, points[i].dy);
+      for (int i = 1; i < points.length - 1; i++) {
+        final p1 = points[i];
+        final p2 = points[i + 1];
+        // midpoint between current and next point
+        final midPoint = Offset((p1.dx + p2.dx) / 2, (p1.dy + p2.dy) / 2);
+
+        path.quadraticBezierTo(p1.dx, p1.dy, midPoint.dx, midPoint.dy);
+        fillPath.quadraticBezierTo(p1.dx, p1.dy, midPoint.dx, midPoint.dy);
       }
+
+      // Add last segment
+      path.lineTo(points.last.dx, points.last.dy);
+      fillPath.lineTo(points.last.dx, points.last.dy);
 
       // Close the fill path
       fillPath.lineTo(points.last.dx, size.height - 30);
@@ -87,29 +95,21 @@ class TemperatureGraphPainter extends CustomPainter {
       paint.color = lineColor;
       canvas.drawPath(path, paint);
     }
-
     // Draw data points, temperatures, and icons
     for (int i = 0; i < points.length; i++) {
       final point = points[i];
       final hour = hourlyData[i];
 
-      // Draw weather icon placeholder
-      // Note: We can't directly draw SVGs on canvas, so we'll draw a colored circle instead
-      // In the widget, we'll position SVGs over these points
-      paint.color = lineColor;
-      paint.style = PaintingStyle.fill;
-      canvas.drawCircle(Offset(point.dx, point.dy - 20), 8, paint);
-
       // Draw max and min temperatures
       final textPainter = TextPainter(
         text: TextSpan(
           text: '${hour.temp.toStringAsFixed(0)}°',
-          style: const TextStyle(color: Colors.black, fontSize: 10),
+          style: const TextStyle(color: Colors.black, fontSize: 14),
         ),
         textDirection: TextDirection.ltr,
       );
       textPainter.layout();
-      textPainter.paint(canvas, Offset(point.dx - 10, point.dy - 40));
+      textPainter.paint(canvas, Offset(point.dx - 10, point.dy - 25));
 
       // Draw time
       final hourText = '${hour.time.hour}:00';
@@ -129,12 +129,12 @@ class TemperatureGraphPainter extends CustomPainter {
       final currentPoint = points[currentTimeIndex];
 
       // Draw outer circle (loosely opaque)
-      paint.color = currentTimeIndicatorColor.withValues(alpha: 0.3);
+      paint.color = lineColor.withValues(alpha: 0.3);
       paint.style = PaintingStyle.fill;
-      canvas.drawCircle(currentPoint, 15, paint);
+      canvas.drawCircle(currentPoint, 10, paint);
 
       // Draw inner circle (solid)
-      paint.color = currentTimeIndicatorColor;
+      paint.color = lineColor;
       paint.style = PaintingStyle.fill;
       canvas.drawCircle(currentPoint, 5, paint);
     }

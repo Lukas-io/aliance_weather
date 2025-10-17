@@ -135,6 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
               HourlyForecastWidget(
                 hourlyData: weatherController.getNext24Hours(),
                 graphColor: Theme.of(context).colorScheme.primary,
+                forecastData: weatherController.forecastData.value,
                 weather: weatherController.weatherData.value,
               ),
 
